@@ -10,11 +10,14 @@ var $startButton = document.getElementById("start-btn");
 var $highScoreButton = document.getElementById("high-score-btn");
 var $hrDivider = document.getElementById("hr-divider");
 var questionCounter;
+var timePerQuestion = 15;
 var timerInterval;
 var currentTimer;
 var randomQuestion = [];
-// var currentAnswer;
 var correctAnswer;
+var currentScore = 0;
+var pointsPerQuestion = (100/questions.length);
+console.log(pointsPerQuestion);
 
 function setupMainPage() {
     $headerRow.setAttribute("class", "row header-row-m align-items-center");
@@ -36,7 +39,7 @@ function setupQuestionsPage() {
     for (i = 0; i < questions.length; i++) {
         randomQuestion[i] = i;
     }
-    currentTimer = 15 * questions.length;
+    currentTimer = timePerQuestion * questions.length;
     $timerDiv.children[0].innerHTML = currentTimer;
     timerInterval = setInterval(function() {
         currentTimer--;
@@ -77,17 +80,22 @@ function runQuestion() {
 
 function checkAnswer(selectedAnswer){
     console.log(selectedAnswer + " : " + correctAnswer)
-    if(randomQuestion.length > 0){
+    if(selectedAnswer === correctAnswer){
+        currentScore = currentTimer + pointsPerQuestion;
+    }else{
+        currentTimer = currentTimer - timePerQuestion;
+    }
+    if(randomQuestion.length > 0 && currentTimer > 0){
         runQuestion();
     }else{
         clearInterval(timerInterval);
-        console.log(currentTimer);
         endQuiz();
     }
 }
 
 function endQuiz(){
-    console.log("End Quiz");
+    finalScore = Math.round(currentScore + currentTimer);
+    console.log("final score: " + finalScore);
     setupMainPage();
 }
 
