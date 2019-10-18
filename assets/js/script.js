@@ -11,6 +11,7 @@ var $highScoreButton = document.getElementById("high-score-btn");
 var $instructions = document.getElementById("instructions");
 var $hrDivider = document.getElementById("hr-divider");
 var questionCounter;
+var timerInterval;
 var currentTimer;
 var randomQuestion = [];
 
@@ -37,18 +38,19 @@ function setupQuestionsPage() {
     $instructions.parentNode.removeChild($instructions);
     $startButton.parentNode.removeChild($startButton);
     $highScoreButton.parentNode.removeChild($highScoreButton);
-    questionCounter = questions.length;
-    for (i = 0; i < questionCounter; i++) {
+    questions.length;
+    for (i = 0; i < questions.length; i++) {
         randomQuestion[i] = i;
     }
-    currentTimer = 15 * questionCounter;
+    currentTimer = 15 * questions.length;
     $timerDiv.children[0].innerHTML = currentTimer;
-    var timerInterval = setInterval(function() {
+    timerInterval = setInterval(function() {
         currentTimer--;
         $timerDiv.children[0].innerHTML = currentTimer;
     
         if(currentTimer == 0) {
           clearInterval(timerInterval);
+          endQuiz();
         }
     
       }, 1000);
@@ -59,6 +61,7 @@ function setupQuestionsPage() {
 function runQuestion() {
     var currentQuestion = randomQuestion.splice(Math.floor(Math.random() * randomQuestion.length), 1);
     $question.innerHTML = questions[currentQuestion].title;
+    $answerCol.innerHTML = '';
     for (i = 0; i < 4; i++) {
         var answerRow = document.createElement('div');
         var answerCol = document.createElement('div');
@@ -70,16 +73,22 @@ function runQuestion() {
         answerBtn.innerText = questions[currentQuestion].choices[i];
         answerCol.appendChild(answerBtn);
         $answerCol.appendChild(answerRow);
-        document.getElementById("answer" + i).addEventListener("click", setupMainPage);
+        document.getElementById("answer" + i).addEventListener("click", checkAnswer);
     }
 }
 
 function checkAnswer(){
-    //do something
+    if(randomQuestion.length > 0){
+        runQuestion();
+    }else{
+        clearInterval(timerInterval);
+        endQuiz();
+    }
 }
 
 function endQuiz(){
-    //do something
+    console.log("End Quiz");
+    setupMainPage();
 }
 
 //Event Listeners
