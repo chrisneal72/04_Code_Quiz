@@ -32,6 +32,7 @@ h3 {
 }
 
 .header-row-m {
+    position: relative;
     text-align: center;
     color: #777777;
     font-size: 16px;
@@ -41,6 +42,7 @@ h3 {
 }
 
 .header-row-q {
+    position: relative;
     text-align: center;
     color: #777777;
     font-size: 16px;
@@ -49,6 +51,18 @@ h3 {
     height: 33vh;
 }
 
+.timerDiv{
+    position: absolute;
+    width: 100px;
+    right: 0px;
+    top: 0px;
+    text-align: left;
+    color: #777777;
+    font-size: 16px;
+    border-left: 1px dashed lightslategrey;
+    border-bottom: 1px dashed lightslategrey;
+    border-radius: 0px 0px 0px 15px;
+}
 .answer-row {
     text-align: center;
     color: #777777;
