@@ -18,11 +18,11 @@ var $highScoreAchived = document.getElementById("high-score-achived");
 var questionCounter;
 var timePerQuestion = 15;
 var timerInterval;
-var currentTimer;
+var currentTimer = 0;
 var randomQuestion = [];
 var correctAnswer;
-var numCorrect;
-var currentScore;
+var numCorrect = 0;
+var currentScore = 0;
 var pointsPerQuestion = (100/questions.length);
 
 function setupMainPage() {
@@ -102,8 +102,6 @@ function runQuestion() {
 }
 
 function checkAnswer(selectedAnswer){
-    if(!numCorrect){numCorrect = 0}
-    if(!currentScore){currentScore = 0}
     if(selectedAnswer === correctAnswer){
         currentScore = currentScore + pointsPerQuestion;
         numCorrect++;
@@ -139,6 +137,10 @@ var $quizScore = document.getElementById("quiz-score");
     document.getElementById("points-earned").innerHTML = currentScore;
     document.getElementById("time-bonus").innerHTML = currentTimer;
     document.getElementById("elapsed-time").innerHTML = (timePerQuestion * questions.length) - currentTimer;
+    
+    numCorrect = 0;
+    currentScore = 0;
+    currentTimer = 0;
 }
 
 //Event Listeners
