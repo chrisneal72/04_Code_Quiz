@@ -13,34 +13,120 @@
 
 <body>
     <div class="container body-container" id="main-container">
-        <div class="row header-row-q align-items-center" id="header-row">
+        <div class="row header-row-q" id="header-row">
             <div id="timerDiv" class="timerDiv d-none">&nbsp;&nbsp;&nbsp;Timer: <span id="timer-text">0</span></div>
             <div class="col" id="main-header-col">
                 <h1 id="main-heading">Coding Quiz Challenge</h1>
-                <h3 id="instructions">Instructions</h3>
-                <button type="button" class="btn" id="start-btn">Start the Quiz</button>
-                <button type="button" class="btn" id="high-score-btn">See High Scores</button><br>
+                <p>This is a timed quiz with an average of <span class="time-per-q"></span> seconds pre question. There
+                    are <span class="num-of-q"></span> questions.</p>
+                <p>Each question is worth <span class="points-per-q"></span>. A wrong answer will deduct <span
+                        class="time-per-q"></span> second from the remaining time.</p>
+                <p>Any time remaining at the end of the quiz will be awarded as bonus points.</p>
+                <button type="button" class="btn btn-sm" id="start-btn">Start the Quiz</button>
+                <button type="button" class="btn btn-sm" id="high-score-btn">See High Scores</button><br>
             </div>
             <div class="col" id="high-score-header-col">
-                <h2>Question</h2>
-                <button type="button" class="btn" id="main-page-btn2">Return to main Page</button>
+                <div class="row">
+                    <div class="col-6 offset-3">
+                        <div class="row">
+                            <div class="col-3">
+                                <img src="assets/images/gold.png" width="75px">
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-3 right-align">
+                                        Name:
+                                    </div>
+                                    <div class="col left-align" id="first-place-name">
+                                        Your name here?
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 right-align">
+                                        Score:
+                                    </div>
+                                    <div class="col left-align" id="first-place-score">
+                                        Are you the best?
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-3">
+                                <img src="assets/images/Silver.png" width="75px">
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-3 right-align">
+                                        Name:
+                                    </div>
+                                    <div class="col left-align" id="second-place-name">
+                                        Who dis?
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 right-align">
+                                        Score:
+                                    </div>
+                                    <div class="col left-align" id="second-place-score">
+                                            Points for place?
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-3">
+                                <img src="assets/images/bronze.png" width="75px">
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-3 right-align">
+                                        Name:
+                                    </div>
+                                    <div class="col left-align" id="third-place-name">
+                                        Knock knock
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 right-align">
+                                        Score:
+                                    </div>
+                                    <div class="col left-align" id="third-place-score">
+                                        Its a place...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-sm" id="main-page-btn2">Return to main Page</button>
+                        <button type="button" class="btn btn-sm" id="clear-scores-btn">Clear High Scores</button>
+                    </div>
+                </div>
             </div>
             <div class="col" id="quiz-header-col">
                 <h2>Question:</h2>
                 <h2 id="question">Question</h2>
             </div>
             <div class="col" id="end-score-header-col">
-                <div class="row" id="high-score-achived">
-                    <div class="col">
-                        <form id="high-score-form" method="POST">
-                            <h1>You achived a high score!:</h1>
-                            <h2>Enter your name:</h2>
-                            <input type="text" id="enter-name">
-                            <input type="hidden" id="new-high-score">
-                            <input type="hidden" id="new-high-score-position">
-                        </form>
-                    </div>
-                </div>
                 <div class="row" id="current-score">
                     <div class="col">
                         <h1>Your Final Score</h1>
@@ -78,9 +164,10 @@
                             </div>
                         </div>
                         <div class="row  align-items-center">
-                            <div class="col"">
-                                    <button type=" button" class="btn" id="main-page-btn">Return to main Page</button>
-                                <button type="button" class="btn" id="high-score-btn2">See High Scores</button><br>
+                            <div class="col">
+                                <button type="button" class="btn btn-sm" id="main-page-btn">Return to main Page</button>
+                                <button type="button" class="btn btn-sm" id="high-score-btn2">See High
+                                    Scores</button><br>
                             </div>
                         </div>
                     </div>
@@ -93,8 +180,24 @@
             </div>
         </div>
         <div class="row answer-row" id="answer-row">
-            <div class="col" id="answer-col">
-
+            <div class="col">
+                <div class="row">
+                    <div class="col" id="answer-col">
+                    </div>
+                </div>
+                <div class="row d-none" id="high-score-achived">
+                    <div class="col">
+                        <form id="high-score-form" method="POST">
+                            <h1>You achived a high score!:</h1>
+                            <h2>Enter your name:</h2>
+                            <input type="text" id="enter-name" maxlength="20">
+                            <input type="hidden" id="new-high-score">
+                            <input type="hidden" id="new-high-score-position">
+                            <button type="submit" class="btn btn-sm" id="submit-high-score-btn">Submit High
+                                Score</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

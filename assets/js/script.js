@@ -3,6 +3,9 @@ var $mainHeaderCol = document.getElementById("main-header-col");
 var $quizHeaderCol = document.getElementById("quiz-header-col");
 var $highScoreHeaderCol = document.getElementById("high-score-header-col");
 var $endScoreHeaderCol = document.getElementById("end-score-header-col");
+var $timePerQuestion = document.querySelector(".time-per-q");
+var $pointsPerQuestion = document.querySelector(".points-per-q");
+var $numOfQuestions = document.querySelector(".num-of-q");
 var $answerRow = document.getElementById("answer-row");
 var $answerCol = document.getElementById("answer-col");
 var $timerDiv = document.getElementById("timerDiv");
@@ -12,6 +15,7 @@ var $highScoreButton = document.getElementById("high-score-btn");
 var $mainPageButton = document.getElementById("main-page-btn");
 var $mainPageButton2 = document.getElementById("main-page-btn2");
 var $highScoreButton2 = document.getElementById("high-score-btn2");
+var $submitHighScoreButton = document.getElementById("submit-high-score-btn");
 var $hrDivider = document.getElementById("hr-divider");
 var $currentScore = document.getElementById("current-score");
 var $highScoreAchived = document.getElementById("high-score-achived");
@@ -19,6 +23,12 @@ var $highScoreForm = document.getElementById("high-score-form");
 var $highScoreInput = document.getElementById("enter-name");
 var $newHighScore = document.getElementById("new-high-score");
 var $newHighScorePos = document.getElementById("new-high-score-position");
+var $firstPlaceName = document.getElementById("first-place-name");
+var $firstPlaceScore = document.getElementById("first-place-score");
+var $secondPlaceName = document.getElementById("second-place-name");
+var $secondPlaceScore = document.getElementById("second-place-score");
+var $thirdPlaceName = document.getElementById("third-place-name");
+var $thirdPlaceScore = document.getElementById("third-place-score");
 var questionCounter;
 var timePerQuestion = 15;
 var timerInterval;
@@ -29,6 +39,7 @@ var numCorrect = 0;
 var currentScore = 0;
 var pointsPerQuestion = (100 / questions.length);
 var lHighScores = JSON.parse(localStorage.getItem("high-scores"));
+console.log(lHighScores);
 
 function setupMainPage() {
     //SHOWING MY MAIN PAGE DIVS
@@ -41,6 +52,10 @@ function setupMainPage() {
     $timerDiv.setAttribute("class", "timerDiv d-none");
     $hrDivider.setAttribute("class", "d-none");
     $answerRow.setAttribute("class", "d-none");
+    //IF I CHANGE THE QUESTIONS (ADD OR SUBTRACT THESE NUMBERS WILL UPDATE
+    $timePerQuestion.innerHTML = timePerQuestion;
+    $pointsPerQuestion.innerHTML = Math.round(pointsPerQuestion);
+    $numOfQuestions.innerHTML = questions.length;
 }
 
 function setupHighScorePage() {
@@ -56,6 +71,18 @@ function setupHighScorePage() {
     $answerRow.setAttribute("class", "row d-none");
     $currentScore.setAttribute("class", "row d-none");
     $highScoreAchived.setAttribute("class", "row d-none");
+    if (lHighScores[0]) {
+        $firstPlaceName.innerHTML = lHighScores[0].name;
+        $firstPlaceScore.innerHTML = lHighScores[0].score;
+    }
+    if (lHighScores[1]) {
+        $secondPlaceName.innerHTML = lHighScores[1].name;
+        $secondPlaceScore.innerHTML = lHighScores[1].score;
+    }
+    if (lHighScores[2]) {
+        $thirdPlaceName.innerHTML = lHighScores[2].name;
+        $thirdPlaceScore.innerHTML = lHighScores[2].score;
+    }
 }
 
 function setupQuestionsPage() {
@@ -69,6 +96,7 @@ function setupQuestionsPage() {
     $mainHeaderCol.setAttribute("class", "col d-none");
     $highScoreHeaderCol.setAttribute("class", "col d-none");
     $endScoreHeaderCol.setAttribute("class", "col d-none");
+    $highScoreAchived.setAttribute("class", "row d-none");
 
     //CREATING A NUMBER ARRAY TO KEEP KNOW WHAT QUESTIONS WERE USED
     //WHEN I USE A QUESTION NUMBER IT IS REMOVED FROM THIS ARRAY
@@ -172,7 +200,7 @@ function endQuiz() {
     //CHECK CURRENT FINAL SCORE TO THE HIGH SCORES STORED IN LOCAL-STORAGE
     var isGreater = false;
     var i = 0;
-    if (lHighScores) {
+    if (finalScore > 5 && lHighScores) {
         while (i < lHighScores.length && !isGreater) {
             if (finalScore > lHighScores[i].score) {
                 isGreater = true;
@@ -181,12 +209,19 @@ function endQuiz() {
             }
         }
     }
-
-    if (!lHighScores || lHighScores.length < 3 || isGreater) {
+    //IF THIS QUALIFIES AS A NEW HIGH SCORE WE WILL PRESENT THAT ABILITY TO SAVE
+    if ((finalScore > 5 && !lHighScores) || (finalScore > 5 && lHighScores.length < 3) || isGreater) {
         //PRESENT HIGH SCORE DIVS   
+        $headerRow.setAttribute("class", "row header-row-f align-items-center");
         $highScoreAchived.setAttribute("class", "row");
+        $hrDivider.setAttribute("class", "row");
+        $answerRow.setAttribute("class", "row  answer-row-f");
+        $answerCol.innerHTML = '';
         $highScoreInput.disabled = false;
+        $submitHighScoreButton.disabled = false;
         $highScoreInput.value = ''
+        //PASSING THE SCORE AND THE POSITION TO HIDDEN FIELDS SO WE DON'T HAVE TO GRAB AGAIN
+        //I COULD HAVE USED GLOBAL VARS FOR THIS BUT I WANTED TO TRY HIDDEN FIELDS
         $newHighScore.value = finalScore;
         $newHighScorePos.value = i;
     }
@@ -199,17 +234,20 @@ function endQuiz() {
 
 function processHighScore() {
     $highScoreInput.disabled = true;
-    //USE SPLICE TO INSERT    
+    $submitHighScoreButton.disabled = true;
+    $highScoreAchived.setAttribute("class", "row disabled");
+    //USE SPLICE TO INSERT THE SCORE WHERE IT GOES
     if (lHighScores) {
-        console.log("Splicing")
+        //SPLICE OUR NEW SCORE IN
         lHighScores.splice($newHighScorePos.value, 0, { name: $highScoreInput.value, score: $newHighScore.value });
     } else {
-        console.log("Writing in 0")
+        //IF THIS IS THE FIRST TIME THEN INITIALIZE THE ARRAY AND POPULATE
         lHighScores = [];
         lHighScores[0] = { name: $highScoreInput.value, score: $newHighScore.value };
     }
+    //I ONLY WANT TO KEEP 3 SCORES SO WE TRIM OFF THE LOWEST
     while (lHighScores.length > 3) { lHighScores.pop() }
-    console.log(lHighScores)
+    localStorage.setItem("high-scores", JSON.stringify(lHighScores));
 }
 
 //Event Listeners
