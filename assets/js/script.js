@@ -16,6 +16,7 @@ var $highScoreButton = document.getElementById("high-score-btn");
 var $mainPageButton = document.getElementById("main-page-btn");
 var $mainPageButton2 = document.getElementById("main-page-btn2");
 var $highScoreButton2 = document.getElementById("high-score-btn2");
+var $clearScoresButton = document.getElementById("clear-scores-btn");
 var $submitHighScoreButton = document.getElementById("submit-high-score-btn");
 var $hrDivider = document.getElementById("hr-divider");
 var $currentScore = document.getElementById("current-score");
@@ -40,7 +41,6 @@ var numCorrect = 0;
 var currentScore = 0;
 var pointsPerQuestion = (100 / questions.length);
 var lHighScores = JSON.parse(localStorage.getItem("high-scores"));
-console.log(lHighScores);
 
 function setupMainPage() {
     //SHOWING MY MAIN PAGE DIVS
@@ -74,15 +74,15 @@ function setupHighScorePage() {
     $answerRow.setAttribute("class", "row d-none");
     $currentScore.setAttribute("class", "row d-none");
     $highScoreAchived.setAttribute("class", "row d-none");
-    if (lHighScores[0]) {
+    if (lHighScores && lHighScores[0]) {
         $firstPlaceName.innerHTML = lHighScores[0].name;
         $firstPlaceScore.innerHTML = lHighScores[0].score;
     }
-    if (lHighScores[1]) {
+    if (lHighScores && lHighScores[1]) {
         $secondPlaceName.innerHTML = lHighScores[1].name;
         $secondPlaceScore.innerHTML = lHighScores[1].score;
     }
-    if (lHighScores[2]) {
+    if (lHighScores && lHighScores[2]) {
         $thirdPlaceName.innerHTML = lHighScores[2].name;
         $thirdPlaceScore.innerHTML = lHighScores[2].score;
     }
@@ -155,7 +155,7 @@ function runQuestion() {
         answerRow.appendChild(answerCol);
         answerCol.appendChild(answerBtn);
     }
-    
+
     $qTrackerDiv.children[0].innerHTML = questions.length - randomQuestion.length;
     $qTrackerDiv.children[1].innerHTML = questions.length;
 }
@@ -278,4 +278,15 @@ $highScoreForm.addEventListener("submit", function (event) {
         return;
     }
     processHighScore();
+});
+$clearScoresButton.addEventListener("click", function () {
+    lHighScores = '';
+    localStorage.removeItem("high-scores");
+    $firstPlaceName.innerHTML = "Your name here?";
+    $firstPlaceScore.innerHTML = "Are you the best?";
+    $secondPlaceName.innerHTML = "Whats your name?";
+    $secondPlaceScore.innerHTML = "Points for this place?";
+    $thirdPlaceName.innerHTML = "New Game";
+    $thirdPlaceScore.innerHTML = "Who dis?";
+    setupHighScorePage();
 });
