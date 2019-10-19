@@ -82,6 +82,19 @@ h3 {
     border-radius: 0px 0px 0px 15px;
 }
 
+.qTrackerDiv{
+    position: absolute;
+    width: 150px;
+    left: 0px;
+    top: 0px;
+    text-align: left;
+    color: #777777;
+    font-size: 16px;
+    border-right: 1px dashed lightslategrey;
+    border-bottom: 1px dashed lightslategrey;
+    border-radius: 0px 0px 15px 0px;
+}
+
 .answer-row {
     text-align: center;
     color: #777777;

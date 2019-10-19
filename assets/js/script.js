@@ -9,6 +9,7 @@ var $numOfQuestions = document.querySelector(".num-of-q");
 var $answerRow = document.getElementById("answer-row");
 var $answerCol = document.getElementById("answer-col");
 var $timerDiv = document.getElementById("timerDiv");
+var $qTrackerDiv = document.getElementById("qTrackerDiv");
 var $question = document.getElementById("question");
 var $startButton = document.getElementById("start-btn");
 var $highScoreButton = document.getElementById("high-score-btn");
@@ -50,6 +51,7 @@ function setupMainPage() {
     $highScoreHeaderCol.setAttribute("class", "col d-none");
     $endScoreHeaderCol.setAttribute("class", "col d-none");
     $timerDiv.setAttribute("class", "timerDiv d-none");
+    $qTrackerDiv.setAttribute("class", "qTrackerDiv d-none");
     $hrDivider.setAttribute("class", "d-none");
     $answerRow.setAttribute("class", "d-none");
     //IF I CHANGE THE QUESTIONS (ADD OR SUBTRACT THESE NUMBERS WILL UPDATE
@@ -67,6 +69,7 @@ function setupHighScorePage() {
     $quizHeaderCol.setAttribute("class", "col d-none");
     $endScoreHeaderCol.setAttribute("class", "col d-none");
     $timerDiv.setAttribute("class", "timerDiv d-none");
+    $qTrackerDiv.setAttribute("class", "qTrackerDiv d-none");
     $hrDivider.setAttribute("class", "d-none");
     $answerRow.setAttribute("class", "row d-none");
     $currentScore.setAttribute("class", "row d-none");
@@ -90,6 +93,7 @@ function setupQuestionsPage() {
     $headerRow.setAttribute("class", "row header-row-q align-items-center");
     $quizHeaderCol.setAttribute("class", "col");
     $timerDiv.setAttribute("class", "timerDiv");
+    $qTrackerDiv.setAttribute("class", "qTrackerDiv");
     $hrDivider.setAttribute("class", "row");
     $answerRow.setAttribute("class", "row  answer-row");
     //HIDING EVERTHING ELSE
@@ -151,6 +155,9 @@ function runQuestion() {
         answerRow.appendChild(answerCol);
         answerCol.appendChild(answerBtn);
     }
+    
+    $qTrackerDiv.children[0].innerHTML = questions.length - randomQuestion.length;
+    $qTrackerDiv.children[1].innerHTML = questions.length;
 }
 
 function checkAnswer(selectedAnswer) {
@@ -182,6 +189,7 @@ function endQuiz() {
     $quizHeaderCol.setAttribute("class", "col d-none");
     $highScoreHeaderCol.setAttribute("class", "col d-none");
     $timerDiv.setAttribute("class", "timerDiv d-none");
+    $qTrackerDiv.setAttribute("class", "qTrackerDiv d-none");
     $hrDivider.setAttribute("class", "d-none");
     $answerRow.setAttribute("class", "row d-none");
     $highScoreAchived.setAttribute("class", "row d-none");
