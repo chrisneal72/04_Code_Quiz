@@ -26,8 +26,10 @@ var currentScore = 0;
 var pointsPerQuestion = (100/questions.length);
 
 function setupMainPage() {
+    //SHOWING MY MAIN PAGE DIVS
     $headerRow.setAttribute("class", "row header-row-m align-items-center");
     $mainHeaderCol.setAttribute("class", "col");
+    //HIDING EVERYTHING ELSE
     $quizHeaderCol.setAttribute("class", "col d-none");
     $highScoreHeaderCol.setAttribute("class", "col d-none");
     $endScoreHeaderCol.setAttribute("class", "col d-none");
@@ -37,10 +39,12 @@ function setupMainPage() {
 }
 
 function setupHighScorePage() {
+    //SHOWING ALL OF THE HIGH SCORE DIVS
     $headerRow.setAttribute("class", "row header-row-m align-items-center");
+    $highScoreHeaderCol.setAttribute("class", "col");
+    //HIDING EVERYTHING ELSE
     $mainHeaderCol.setAttribute("class", "col d-none");
     $quizHeaderCol.setAttribute("class", "col d-none");
-    $highScoreHeaderCol.setAttribute("class", "col");
     $endScoreHeaderCol.setAttribute("class", "col d-none");
     $timerDiv.setAttribute("class", "timerDiv d-none");
     $hrDivider.setAttribute("class", "d-none");
@@ -50,18 +54,25 @@ function setupHighScorePage() {
 }
 
 function setupQuestionsPage() {
+    //SHOWING THE REQUIRED QUESTION DIVS
     $headerRow.setAttribute("class", "row header-row-q align-items-center");
-    $mainHeaderCol.setAttribute("class", "col d-none");
     $quizHeaderCol.setAttribute("class", "col");
-    $highScoreHeaderCol.setAttribute("class", "col d-none");
-    $endScoreHeaderCol.setAttribute("class", "col d-none");
     $timerDiv.setAttribute("class", "timerDiv");
     $hrDivider.setAttribute("class", "row");
     $answerRow.setAttribute("class", "row  answer-row");
-    questions.length;
+    //HIDING EVERTHING ELSE
+    $mainHeaderCol.setAttribute("class", "col d-none");
+    $highScoreHeaderCol.setAttribute("class", "col d-none");
+    $endScoreHeaderCol.setAttribute("class", "col d-none");
+    
+    //CREATING A NUMBER ARRAY TO KEEP KNOW WHAT QUESTIONS WERE USED
+    //WHEN I USE A QUESTION NUMBER IT IS REMOVED FROM THIS ARRAY
+    //AND CAN NOT BE USED AGAIN
     for (i = 0; i < questions.length; i++) {
         randomQuestion[i] = i;
     }
+
+    //INITIALIZING MY INTERVAL AND MY COUNTDOWN TIMER
     currentTimer = timePerQuestion * questions.length;
     $timerDiv.children[0].innerHTML = currentTimer;
     timerInterval = setInterval(function() {
@@ -75,13 +86,21 @@ function setupQuestionsPage() {
         
     }, 1000);
     
+    //TIME TO START ASKING QUESTIONS
     runQuestion();
 }
 
 function runQuestion() {
+    //THIS TAKES OUT A RANDOM NUMBER FROM THE ARRAY
+    //THE LENGTH OF THE ARRAY GETS SHORTER BUT 
+    //I'M USING THE VALUES TO MATCH TO THE QUESTION ARRAY'S INDEX
+    //SO IF THE VALUE 3 IS MISSING, I CAN NOT GRAB THAT INDEX AGAIN
     var currentQuestion = randomQuestion.splice(Math.floor(Math.random() * randomQuestion.length), 1);
+    //POPULATE THE QUESTION IN THE QUESTION DIV
     $question.innerHTML = questions[currentQuestion].title;
+    //CLEAR PREVIOUS BUTTONS START WITH A CLEAN SLATE
     $answerCol.innerHTML = '';
+    //LOOP OVER EACH ANSWER AND BUILD ITS BUTTON AND PUT IT ON THE PAGE
     for (i = 0; i < questions[currentQuestion].choices.length; i++) {
         var answerRow = document.createElement('div');
         answerRow.setAttribute("class", "row");
@@ -102,12 +121,15 @@ function runQuestion() {
 }
 
 function checkAnswer(selectedAnswer){
+    //CHECK THE ANSWER
     if(selectedAnswer === correctAnswer){
         currentScore = currentScore + pointsPerQuestion;
         numCorrect++;
     }else{
+        //IF THEY GET IT WRONG APPLY 15 SEC PENALTY TO THE ACTIVE TIME
         currentTimer = currentTimer - timePerQuestion;
     }
+    //SEE IF I HAVE RUN OUT OF QUESTIONS
     if(randomQuestion.length > 0 && currentTimer > 0){
         runQuestion();
     }else{
@@ -117,27 +139,32 @@ function checkAnswer(selectedAnswer){
 }
 
 function endQuiz(){
-    
-var $quizScore = document.getElementById("quiz-score");
-    currentScore = Math.round(currentScore);
-    var finalScore = currentScore + currentTimer;
-    if(finalScore < 0){finalScore = 0}
+    //SHOW MY ENDING SCORE SCREEN
     $headerRow.setAttribute("class", "row header-row-m align-items-center");
+    $endScoreHeaderCol.setAttribute("class", "col");
+    $currentScore.setAttribute("class", "row");
+    var $quizScore = document.getElementById("quiz-score");
+    //HODE EVERTHING ELSE
     $mainHeaderCol.setAttribute("class", "col d-none");
     $quizHeaderCol.setAttribute("class", "col d-none");
     $highScoreHeaderCol.setAttribute("class", "col d-none");
-    $endScoreHeaderCol.setAttribute("class", "col");
     $timerDiv.setAttribute("class", "timerDiv d-none");
     $hrDivider.setAttribute("class", "d-none");
     $answerRow.setAttribute("class", "row d-none");
-    $currentScore.setAttribute("class", "row");
     $highScoreAchived.setAttribute("class", "row d-none");
+    
+    //REFINE THE NUMBERS A BIT
+    currentScore = Math.round(currentScore);
+    var finalScore = currentScore + currentTimer;
+    if(finalScore < 0){finalScore = 0}
+    //SEND THE STATS TO THE MAIN PAGE
     document.getElementById("quiz-score").innerHTML = finalScore;
     document.getElementById("num-correct").innerHTML = numCorrect;
     document.getElementById("points-earned").innerHTML = currentScore;
     document.getElementById("time-bonus").innerHTML = currentTimer;
     document.getElementById("elapsed-time").innerHTML = (timePerQuestion * questions.length) - currentTimer;
     
+    //RESET THE TRACKING VARS SO THEY DON'T KEEP BUILDING INTO THE NEXT QUIZ SESS
     numCorrect = 0;
     currentScore = 0;
     currentTimer = 0;
