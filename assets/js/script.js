@@ -31,6 +31,7 @@ var $secondPlaceName = document.getElementById("second-place-name");
 var $secondPlaceScore = document.getElementById("second-place-score");
 var $thirdPlaceName = document.getElementById("third-place-name");
 var $thirdPlaceScore = document.getElementById("third-place-score");
+var $answerImage = document.getElementById("answerImage");
 var questionCounter;
 var timePerQuestion = 15;
 var timerInterval;
@@ -41,6 +42,7 @@ var numCorrect = 0;
 var currentScore = 0;
 var pointsPerQuestion = (100 / questions.length);
 var lHighScores = JSON.parse(localStorage.getItem("high-scores"));
+var modal = document.getElementById("myModal");
 
 function setupMainPage() {
     //SHOWING MY MAIN PAGE DIVS
@@ -161,21 +163,33 @@ function runQuestion() {
 }
 
 function checkAnswer(selectedAnswer) {
+    modal.style.display = "block";
     //CHECK THE ANSWER
     if (selectedAnswer === correctAnswer) {
+        $answerImage.src = "assets/images/checkmark.png";
         currentScore = currentScore + pointsPerQuestion;
         numCorrect++;
     } else {
         //IF THEY GET IT WRONG APPLY 15 SEC PENALTY TO THE ACTIVE TIME
         currentTimer = currentTimer - timePerQuestion;
+
+        $answerImage.src = "assets/images/xmark.png";
     }
-    //SEE IF I HAVE RUN OUT OF QUESTIONS
-    if (randomQuestion.length > 0 && currentTimer > 0) {
-        runQuestion();
-    } else {
-        clearInterval(timerInterval);
-        endQuiz();
-    }
+
+    //2 SECOND PAUSE TO SHOW THE CHECK OR X
+    setTimeout(function () {
+        //HIDE THE MODAL
+        modal.style.display = "none";
+        //ADD THE 2 SECOND WAIT BACK ON TO THE TIMER
+        currentTimer = currentTimer + 2;
+        //SEE IF I HAVE RUN OUT OF QUESTIONS
+        if (randomQuestion.length > 0 && currentTimer > 0) {
+            runQuestion();
+        } else {
+            clearInterval(timerInterval);
+            endQuiz();
+        }
+    }, 2000);
 }
 
 function endQuiz() {
