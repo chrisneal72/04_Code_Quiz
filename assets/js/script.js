@@ -1,37 +1,60 @@
-var $mainContainer = document.getElementById("main-container");
 var $headerRow = document.getElementById("header-row");
 var $mainHeaderCol = document.getElementById("main-header-col");
 var $quizHeaderCol = document.getElementById("quiz-header-col");
+var $highScoreHeaderCol = document.getElementById("high-score-header-col");
+var $endScoreHeaderCol = document.getElementById("end-score-header-col");
 var $answerRow = document.getElementById("answer-row");
 var $answerCol = document.getElementById("answer-col");
 var $timerDiv = document.getElementById("timerDiv");
 var $question = document.getElementById("question");
 var $startButton = document.getElementById("start-btn");
 var $highScoreButton = document.getElementById("high-score-btn");
+var $mainPageButton = document.getElementById("main-page-btn");
+var $mainPageButton2 = document.getElementById("main-page-btn2");
+var $highScoreButton2 = document.getElementById("high-score-btn2");
 var $hrDivider = document.getElementById("hr-divider");
+var $currentScore = document.getElementById("current-score");
+var $highScoreAchived = document.getElementById("high-score-achived");
 var questionCounter;
 var timePerQuestion = 15;
 var timerInterval;
 var currentTimer;
 var randomQuestion = [];
 var correctAnswer;
-var currentScore = 0;
+var numCorrect;
+var currentScore;
 var pointsPerQuestion = (100/questions.length);
-console.log(pointsPerQuestion);
 
 function setupMainPage() {
     $headerRow.setAttribute("class", "row header-row-m align-items-center");
     $mainHeaderCol.setAttribute("class", "col");
     $quizHeaderCol.setAttribute("class", "col d-none");
+    $highScoreHeaderCol.setAttribute("class", "col d-none");
+    $endScoreHeaderCol.setAttribute("class", "col d-none");
     $timerDiv.setAttribute("class", "timerDiv d-none");
     $hrDivider.setAttribute("class", "d-none");
     $answerRow.setAttribute("class", "d-none");
+}
+
+function setupHighScorePage() {
+    $headerRow.setAttribute("class", "row header-row-m align-items-center");
+    $mainHeaderCol.setAttribute("class", "col d-none");
+    $quizHeaderCol.setAttribute("class", "col d-none");
+    $highScoreHeaderCol.setAttribute("class", "col");
+    $endScoreHeaderCol.setAttribute("class", "col d-none");
+    $timerDiv.setAttribute("class", "timerDiv d-none");
+    $hrDivider.setAttribute("class", "d-none");
+    $answerRow.setAttribute("class", "row d-none");
+    $currentScore.setAttribute("class", "row d-none");
+    $highScoreAchived.setAttribute("class", "row d-none");  
 }
 
 function setupQuestionsPage() {
     $headerRow.setAttribute("class", "row header-row-q align-items-center");
     $mainHeaderCol.setAttribute("class", "col d-none");
     $quizHeaderCol.setAttribute("class", "col");
+    $highScoreHeaderCol.setAttribute("class", "col d-none");
+    $endScoreHeaderCol.setAttribute("class", "col d-none");
     $timerDiv.setAttribute("class", "timerDiv");
     $hrDivider.setAttribute("class", "row");
     $answerRow.setAttribute("class", "row  answer-row");
@@ -44,13 +67,13 @@ function setupQuestionsPage() {
     timerInterval = setInterval(function() {
         currentTimer--;
         $timerDiv.children[0].innerHTML = currentTimer;
-    
+        
         if(currentTimer < 1) {
-          clearInterval(timerInterval);
-          endQuiz();
+            clearInterval(timerInterval);
+            endQuiz();
         }
-    
-      }, 1000);
+        
+    }, 1000);
     
     runQuestion();
 }
@@ -79,9 +102,11 @@ function runQuestion() {
 }
 
 function checkAnswer(selectedAnswer){
-    console.log(selectedAnswer + " : " + correctAnswer)
+    if(!numCorrect){numCorrect = 0}
+    if(!currentScore){currentScore = 0}
     if(selectedAnswer === correctAnswer){
-        currentScore = currentTimer + pointsPerQuestion;
+        currentScore = currentScore + pointsPerQuestion;
+        numCorrect++;
     }else{
         currentTimer = currentTimer - timePerQuestion;
     }
@@ -94,14 +119,37 @@ function checkAnswer(selectedAnswer){
 }
 
 function endQuiz(){
-    finalScore = Math.round(currentScore + currentTimer);
-    console.log("final score: " + finalScore);
-    setupMainPage();
+    
+var $quizScore = document.getElementById("quiz-score");
+    currentScore = Math.round(currentScore);
+    var finalScore = currentScore + currentTimer;
+    if(finalScore < 0){finalScore = 0}
+    $headerRow.setAttribute("class", "row header-row-m align-items-center");
+    $mainHeaderCol.setAttribute("class", "col d-none");
+    $quizHeaderCol.setAttribute("class", "col d-none");
+    $highScoreHeaderCol.setAttribute("class", "col d-none");
+    $endScoreHeaderCol.setAttribute("class", "col");
+    $timerDiv.setAttribute("class", "timerDiv d-none");
+    $hrDivider.setAttribute("class", "d-none");
+    $answerRow.setAttribute("class", "row d-none");
+    $currentScore.setAttribute("class", "row");
+    $highScoreAchived.setAttribute("class", "row d-none");
+    document.getElementById("quiz-score").innerHTML = finalScore;
+    document.getElementById("num-correct").innerHTML = numCorrect;
+    document.getElementById("points-earned").innerHTML = currentScore;
+    document.getElementById("time-bonus").innerHTML = currentTimer;
+    document.getElementById("elapsed-time").innerHTML = (timePerQuestion * questions.length) - currentTimer;
 }
 
 //Event Listeners
 window.addEventListener("DOMContentLoaded", setupMainPage);
 $startButton.addEventListener("click", setupQuestionsPage);
+$highScoreButton.addEventListener("click", setupHighScorePage);
+$mainPageButton.addEventListener("click", setupMainPage);
+$mainPageButton2.addEventListener("click", setupMainPage);
+$highScoreButton2.addEventListener("click", setupHighScorePage);
 $answerCol.addEventListener("click", function(evt){
-    checkAnswer(evt.target.value);
+    if(evt.target.matches("button")){
+        checkAnswer(evt.target.value);
+    }
 });

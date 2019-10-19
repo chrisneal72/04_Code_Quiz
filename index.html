@@ -22,8 +22,68 @@
                     <button type="button" class="btn" id="start-btn">Start the Quiz</button>
                     <button type="button" class="btn" id="high-score-btn">See High Scores</button><br>
                 </div>
+                <div class="col" id="high-score-header-col">
+                    <h2>Question</h2>
+                    <button type="button" class="btn" id="main-page-btn2">Return to main Page</button>
+                </div>
                 <div class="col" id="quiz-header-col">
+                    <h2>Question:</h2>
                     <h2 id="question">Question</h2>
+                </div>
+                <div class="col" id="end-score-header-col">
+                    <div class="row" id="high-score-achived">
+                        <div class="col">
+                            <form id="high-score-form">
+                                <h1>You achived a high score!:</h1>
+                                <h2>Enter your name:</h2>
+                                <input type="text" id="enter-name">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row" id="current-score">
+                        <div class="col">
+                            <h1>Your Final Score</h1>
+                            <h2 id="quiz-score"></h2>
+                            <div class="row">
+                                <div class="col small-text-leftside">
+                                    Correct Answers:&nbsp;
+                                </div>
+                                <div class="col small-text-rightside">
+                                    &nbsp;<span id="num-correct"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col small-text-leftside">
+                                    Points Earned:&nbsp;
+                                </div>
+                                <div class="col small-text-rightside">
+                                    &nbsp;<span id="points-earned"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col small-text-leftside">
+                                    Time Bonus:&nbsp;
+                                </div>
+                                <div class="col small-text-rightside">
+                                    &nbsp;<span id="time-bonus"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col small-text-leftside">
+                                    Elapsed Time:&nbsp;
+                                </div>
+                                <div class="col small-text-rightside">
+                                    &nbsp;<span id="elapsed-time"></span>
+                                </div>
+                            </div>
+                            <div class="row  align-items-center">
+                                <div class="col"">
+                                    <button type="button" class="btn" id="main-page-btn">Return to main Page</button>
+                                    <button type="button" class="btn" id="high-score-btn2">See High Scores</button><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row d-none" id="hr-divider">
@@ -33,7 +93,7 @@
             </div>
             <div class="row answer-row" id="answer-row">
                 <div class="col" id="answer-col">
-                    
+
                 </div>
             </div>
         </div>

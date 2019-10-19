@@ -63,12 +63,25 @@ h3 {
     border-bottom: 1px dashed lightslategrey;
     border-radius: 0px 0px 0px 15px;
 }
+
 .answer-row {
     text-align: center;
     color: #777777;
     font-size: 16px;
     border: 3px dashed lightslategrey;
     border-radius: 25px;
+}
+
+.small-text-leftside {
+    text-align: right;
+    color: black;
+    font-size: 10px;
+}
+
+.small-text-rightside {
+    text-align: left;
+    color: black;
+    font-size: 10px;
 }
 
 .hr {
