@@ -11,7 +11,7 @@ var questions = [
     },
     {
       title: "What are variables used for in JavaScript Programs?",
-      choices: ["Varying randomly", "Storing numbers, dates, or other values", "Causing high-school algebra flashbacks", "None of the above"],
+      choices: ["Varying randomly", "Storing numbers, dates, or other values", "Causing high-school algebra flashbacks"],
       answer: "Storing numbers, dates, or other values"
     },
     {
@@ -21,7 +21,7 @@ var questions = [
     },
     {
       title: "Which of the following can’t be done with client-side JavaScript?",
-      choices: ["Validating a form", "Sending a form’s contents by email", "Storing the form’s contents to a database file on the server", "None of the above"],
+      choices: ["Validating a form", "Sending a form’s contents by email", "Storing the form’s contents to a database file on the server"],
       answer: "Storing the form’s contents to a database file on the server"
     },
     {

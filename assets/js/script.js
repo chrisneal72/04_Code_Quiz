@@ -15,6 +15,10 @@ var $highScoreButton2 = document.getElementById("high-score-btn2");
 var $hrDivider = document.getElementById("hr-divider");
 var $currentScore = document.getElementById("current-score");
 var $highScoreAchived = document.getElementById("high-score-achived");
+var $highScoreForm = document.getElementById("high-score-form");
+var $highScoreInput = document.getElementById("enter-name");
+var $newHighScore = document.getElementById("new-high-score");
+var $newHighScorePos = document.getElementById("new-high-score-position");
 var questionCounter;
 var timePerQuestion = 15;
 var timerInterval;
@@ -23,7 +27,8 @@ var randomQuestion = [];
 var correctAnswer;
 var numCorrect = 0;
 var currentScore = 0;
-var pointsPerQuestion = (100/questions.length);
+var pointsPerQuestion = (100 / questions.length);
+var lHighScores = JSON.parse(localStorage.getItem("high-scores"));
 
 function setupMainPage() {
     //SHOWING MY MAIN PAGE DIVS
@@ -50,7 +55,7 @@ function setupHighScorePage() {
     $hrDivider.setAttribute("class", "d-none");
     $answerRow.setAttribute("class", "row d-none");
     $currentScore.setAttribute("class", "row d-none");
-    $highScoreAchived.setAttribute("class", "row d-none");  
+    $highScoreAchived.setAttribute("class", "row d-none");
 }
 
 function setupQuestionsPage() {
@@ -64,7 +69,7 @@ function setupQuestionsPage() {
     $mainHeaderCol.setAttribute("class", "col d-none");
     $highScoreHeaderCol.setAttribute("class", "col d-none");
     $endScoreHeaderCol.setAttribute("class", "col d-none");
-    
+
     //CREATING A NUMBER ARRAY TO KEEP KNOW WHAT QUESTIONS WERE USED
     //WHEN I USE A QUESTION NUMBER IT IS REMOVED FROM THIS ARRAY
     //AND CAN NOT BE USED AGAIN
@@ -75,17 +80,17 @@ function setupQuestionsPage() {
     //INITIALIZING MY INTERVAL AND MY COUNTDOWN TIMER
     currentTimer = timePerQuestion * questions.length;
     $timerDiv.children[0].innerHTML = currentTimer;
-    timerInterval = setInterval(function() {
+    timerInterval = setInterval(function () {
         currentTimer--;
         $timerDiv.children[0].innerHTML = currentTimer;
-        
-        if(currentTimer < 1) {
+
+        if (currentTimer < 1) {
             clearInterval(timerInterval);
             endQuiz();
         }
-        
+
     }, 1000);
-    
+
     //TIME TO START ASKING QUESTIONS
     runQuestion();
 }
@@ -120,25 +125,25 @@ function runQuestion() {
     }
 }
 
-function checkAnswer(selectedAnswer){
+function checkAnswer(selectedAnswer) {
     //CHECK THE ANSWER
-    if(selectedAnswer === correctAnswer){
+    if (selectedAnswer === correctAnswer) {
         currentScore = currentScore + pointsPerQuestion;
         numCorrect++;
-    }else{
+    } else {
         //IF THEY GET IT WRONG APPLY 15 SEC PENALTY TO THE ACTIVE TIME
         currentTimer = currentTimer - timePerQuestion;
     }
     //SEE IF I HAVE RUN OUT OF QUESTIONS
-    if(randomQuestion.length > 0 && currentTimer > 0){
+    if (randomQuestion.length > 0 && currentTimer > 0) {
         runQuestion();
-    }else{
+    } else {
         clearInterval(timerInterval);
         endQuiz();
     }
 }
 
-function endQuiz(){
+function endQuiz() {
     //SHOW MY ENDING SCORE SCREEN
     $headerRow.setAttribute("class", "row header-row-m align-items-center");
     $endScoreHeaderCol.setAttribute("class", "col");
@@ -152,22 +157,59 @@ function endQuiz(){
     $hrDivider.setAttribute("class", "d-none");
     $answerRow.setAttribute("class", "row d-none");
     $highScoreAchived.setAttribute("class", "row d-none");
-    
+
     //REFINE THE NUMBERS A BIT
     currentScore = Math.round(currentScore);
     var finalScore = currentScore + currentTimer;
-    if(finalScore < 0){finalScore = 0}
+    if (finalScore < 0) { finalScore = 0 }
     //SEND THE STATS TO THE MAIN PAGE
     document.getElementById("quiz-score").innerHTML = finalScore;
     document.getElementById("num-correct").innerHTML = numCorrect;
     document.getElementById("points-earned").innerHTML = currentScore;
     document.getElementById("time-bonus").innerHTML = currentTimer;
     document.getElementById("elapsed-time").innerHTML = (timePerQuestion * questions.length) - currentTimer;
-    
+
+    //CHECK CURRENT FINAL SCORE TO THE HIGH SCORES STORED IN LOCAL-STORAGE
+    var isGreater = false;
+    var i = 0;
+    if (lHighScores) {
+        while (i < lHighScores.length && !isGreater) {
+            if (finalScore > lHighScores[i].score) {
+                isGreater = true;
+            } else {
+                i++;
+            }
+        }
+    }
+
+    if (!lHighScores || lHighScores.length < 3 || isGreater) {
+        //PRESENT HIGH SCORE DIVS   
+        $highScoreAchived.setAttribute("class", "row");
+        $highScoreInput.disabled = false;
+        $highScoreInput.value = ''
+        $newHighScore.value = finalScore;
+        $newHighScorePos.value = i;
+    }
+
     //RESET THE TRACKING VARS SO THEY DON'T KEEP BUILDING INTO THE NEXT QUIZ SESS
     numCorrect = 0;
     currentScore = 0;
     currentTimer = 0;
+}
+
+function processHighScore() {
+    $highScoreInput.disabled = true;
+    //USE SPLICE TO INSERT    
+    if (lHighScores) {
+        console.log("Splicing")
+        lHighScores.splice($newHighScorePos.value, 0, { name: $highScoreInput.value, score: $newHighScore.value });
+    } else {
+        console.log("Writing in 0")
+        lHighScores = [];
+        lHighScores[0] = { name: $highScoreInput.value, score: $newHighScore.value };
+    }
+    while (lHighScores.length > 3) { lHighScores.pop() }
+    console.log(lHighScores)
 }
 
 //Event Listeners
@@ -177,8 +219,17 @@ $highScoreButton.addEventListener("click", setupHighScorePage);
 $mainPageButton.addEventListener("click", setupMainPage);
 $mainPageButton2.addEventListener("click", setupMainPage);
 $highScoreButton2.addEventListener("click", setupHighScorePage);
-$answerCol.addEventListener("click", function(evt){
-    if(evt.target.matches("button")){
+$answerCol.addEventListener("click", function (evt) {
+    if (evt.target.matches("button")) {
         checkAnswer(evt.target.value);
     }
+});
+$highScoreForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var highScoreFormText = $highScoreInput.value.trim();
+    // Return from function early if submitted todoText is blank
+    if (highScoreFormText === "") {
+        return;
+    }
+    processHighScore();
 });
