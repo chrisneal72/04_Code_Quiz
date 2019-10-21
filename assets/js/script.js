@@ -62,15 +62,12 @@ function setupMainPage() {
     //IF I CHANGE THE QUESTIONS (ADD OR SUBTRACT THESE NUMBERS WILL UPDATE
     whichQuiz = $questionSelector.checked;
     if(whichQuiz){
-        console.log('Long Quiz')
         //LONG QUIZ
         questionList = questions;
     }else{
-        console.log('Short Quiz')
         //Short Quiz
         questionList = questionsShort;
     }
-    console.log(questionList)
     $timePerQuestion.innerHTML = timePerQuestion;
     pointsPerQuestion = (100 / questionList.length);
     $pointsPerQuestion.innerHTML = Math.round(pointsPerQuestion);
