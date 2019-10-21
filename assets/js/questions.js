@@ -11,7 +11,7 @@ var questions = [
     },
     {
       title: "What are variables used for in JavaScript Programs?",
-      choices: ["Varying randomly", "Storing numbers, dates, or other values", "Causing high-school algebra flashbacks"],
+      choices: ["Varying random information", "Storing numbers, dates, or other values", "Causing high-school algebra flashbacks"],
       answer: "Storing numbers, dates, or other values"
     },
     {
@@ -20,14 +20,31 @@ var questions = [
       answer: "Client-side"
     },
     {
-      title: "Which of the following can’t be done with client-side JavaScript?",
-      choices: ["Validating a form", "Sending a form’s contents by email", "Storing the form’s contents to a database file on the server"],
-      answer: "Storing the form’s contents to a database file on the server"
-    },
-    {
       title: "Which of the following is not a valid JavaScript variable name?",
       choices: ["FirstAndLas", "_first_and_last_names", "my2names", "2names"],
       answer: "2names"
     },
-    ///etc.
+
+//     ______ tag is an extension to HTML that can enclose any number of JavaScript statements.
+// A.  <SCRIPT>
+// B.   <BODY>
+// C.  <HEAD>
+// D.  <TITLE>
+//  Ans: A
+
+//  Which of the following event fires when the form element loses the focus: <button>, <input>, <label>, <select>, <textarea>?
+// A.  onfocus
+// B.  onblur
+// C.  onclick
+// D.  ondblclick
+//  Ans: B
+
+//  Using _______ statement is how you test for a specific condition.
+// A.  Select
+// B.  If
+// C.  Switch
+// D.  For
+//  Ans: B
+
+
   ];

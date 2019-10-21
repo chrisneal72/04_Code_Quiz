@@ -113,11 +113,10 @@ function setupQuestionsPage() {
 
     //INITIALIZING MY INTERVAL AND MY COUNTDOWN TIMER
     currentTimer = timePerQuestion * questions.length;
-    $timerDiv.children[0].innerHTML = currentTimer;
+    $timerDiv.children[0].innerHTML = fmtMSS(currentTimer);
     timerInterval = setInterval(function () {
         currentTimer--;
-        $timerDiv.children[0].innerHTML = currentTimer;
-
+        $timerDiv.children[0].innerHTML = fmtMSS(currentTimer);
         if (currentTimer < 1) {
             clearInterval(timerInterval);
             endQuiz();
@@ -217,7 +216,7 @@ function endQuiz() {
     document.getElementById("num-correct").innerHTML = numCorrect;
     document.getElementById("points-earned").innerHTML = currentScore;
     document.getElementById("time-bonus").innerHTML = currentTimer;
-    document.getElementById("elapsed-time").innerHTML = (timePerQuestion * questions.length) - currentTimer;
+    document.getElementById("elapsed-time").innerHTML = fmtMSS((timePerQuestion * questions.length) - currentTimer);
 
     //CHECK CURRENT FINAL SCORE TO THE HIGH SCORES STORED IN LOCAL-STORAGE
     var isGreater = false;
@@ -304,3 +303,9 @@ $clearScoresButton.addEventListener("click", function () {
     $thirdPlaceScore.innerHTML = "Who dis?";
     setupHighScorePage();
 });
+
+//Yes I borrowed this from Google. s is the seconds passed in
+//Divide those seconds by 60 and subtract from the original seconds passed in
+//divide all of that by 60 to get the minutes. The remainins seconds are then added to the end
+//It adds : unless the seconds are less that 9, the it adds :0
+function fmtMSS(s){return(s-(s%=60))/60+(9<s?':':':0')+s}
