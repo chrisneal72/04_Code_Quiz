@@ -13,7 +13,7 @@ The project is all on one HTML page and controlled with CSS and JS. The HTML is 
 
 I have built in the functionalit I want, however it is not the best looking page. With this course I have done more function over form.
 
-The main page has some numbers on it dealing with questions and scoring. These numbers are dynamic based on the questions. More questions the page updates automatically.
+The main page has some numbers on it dealing with questions and scoring. These numbers are dynamic based on the questions. More questions the page updates automatically. To show that these numbers are dynamic I added selector switch for a short test and a long test. The numbers adjust based on the selector and the number of questions changes too.
 
 The questions page is looping through 2 functions until the questions are all asked. The questions are in a random order. Each question is updated on the fly and the answer buttons are created at the time the question is asked. Once the question is answered a basic modal appears and a green check or a red X covers the question for 2 seconds. While this is happening I am putting 2 seconds back on the players score.
 
