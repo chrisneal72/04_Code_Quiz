@@ -33,16 +33,19 @@ var $thirdPlaceName = document.getElementById("third-place-name");
 var $thirdPlaceScore = document.getElementById("third-place-score");
 var $answerImage = document.getElementById("answerImage");
 var questionCounter;
-var timePerQuestion = 15;
 var timerInterval;
 var currentTimer = 0;
 var randomQuestion = [];
 var correctAnswer;
 var numCorrect = 0;
 var currentScore = 0;
-var pointsPerQuestion = (100 / questions.length);
+var $questionSelector = document.getElementById("question-selector");
 var lHighScores = JSON.parse(localStorage.getItem("high-scores"));
+var timePerQuestion = 15;
+var pointsPerQuestion = (100 / questions.length);
 var modal = document.getElementById("myModal");
+var questionList;
+var whichQuiz; 
 
 function setupMainPage() {
     //SHOWING MY MAIN PAGE DIVS
@@ -57,9 +60,21 @@ function setupMainPage() {
     $hrDivider.setAttribute("class", "d-none");
     $answerRow.setAttribute("class", "d-none");
     //IF I CHANGE THE QUESTIONS (ADD OR SUBTRACT THESE NUMBERS WILL UPDATE
+    whichQuiz = $questionSelector.checked;
+    if(whichQuiz){
+        console.log('Long Quiz')
+        //LONG QUIZ
+        questionList = questions;
+    }else{
+        console.log('Short Quiz')
+        //Short Quiz
+        questionList = questionsShort;
+    }
+    console.log(questionList)
     $timePerQuestion.innerHTML = timePerQuestion;
+    pointsPerQuestion = (100 / questionList.length);
     $pointsPerQuestion.innerHTML = Math.round(pointsPerQuestion);
-    $numOfQuestions.innerHTML = questions.length;
+    $numOfQuestions.innerHTML = questionList.length;
 }
 
 function setupHighScorePage() {
@@ -107,12 +122,12 @@ function setupQuestionsPage() {
     //CREATING A NUMBER ARRAY TO KEEP KNOW WHAT QUESTIONS WERE USED
     //WHEN I USE A QUESTION NUMBER IT IS REMOVED FROM THIS ARRAY
     //AND CAN NOT BE USED AGAIN
-    for (i = 0; i < questions.length; i++) {
+    for (i = 0; i < questionList.length; i++) {
         randomQuestion[i] = i;
     }
 
     //INITIALIZING MY INTERVAL AND MY COUNTDOWN TIMER
-    currentTimer = timePerQuestion * questions.length;
+    currentTimer = timePerQuestion * questionList.length;
     $timerDiv.children[0].innerHTML = fmtMSS(currentTimer);
     timerInterval = setInterval(function () {
         currentTimer--;
@@ -135,18 +150,18 @@ function runQuestion() {
     //SO IF THE VALUE 3 IS MISSING, I CAN NOT GRAB THAT INDEX AGAIN
     var currentQuestion = randomQuestion.splice(Math.floor(Math.random() * randomQuestion.length), 1);
     //POPULATE THE QUESTION IN THE QUESTION DIV
-    $question.innerHTML = questions[currentQuestion].title;
+    $question.innerHTML = questionList[currentQuestion].title;
     //CLEAR PREVIOUS BUTTONS START WITH A CLEAN SLATE
     $answerCol.innerHTML = '';
     //LOOP OVER EACH ANSWER AND BUILD ITS BUTTON AND PUT IT ON THE PAGE
-    for (i = 0; i < questions[currentQuestion].choices.length; i++) {
+    for (i = 0; i < questionList[currentQuestion].choices.length; i++) {
         var answerRow = document.createElement('div');
         answerRow.setAttribute("class", "row");
         var answerCol = document.createElement('div');
         answerCol.setAttribute("class", "col");
         var answerBtn = document.createElement('button');
-        var thisChoice = questions[currentQuestion].choices[i];
-        correctAnswer = questions[currentQuestion].answer;
+        var thisChoice = questionList[currentQuestion].choices[i];
+        correctAnswer = questionList[currentQuestion].answer;
         answerBtn.setAttribute("type", "button");
         answerBtn.setAttribute("class", "btn");
         answerBtn.setAttribute("id", "answer" + i);
@@ -157,8 +172,8 @@ function runQuestion() {
         answerCol.appendChild(answerBtn);
     }
 
-    $qTrackerDiv.children[0].innerHTML = questions.length - randomQuestion.length;
-    $qTrackerDiv.children[1].innerHTML = questions.length;
+    $qTrackerDiv.children[0].innerHTML = questionList.length - randomQuestion.length;
+    $qTrackerDiv.children[1].innerHTML = questionList.length;
 }
 
 function checkAnswer(selectedAnswer) {
@@ -216,7 +231,7 @@ function endQuiz() {
     document.getElementById("num-correct").innerHTML = numCorrect;
     document.getElementById("points-earned").innerHTML = currentScore;
     document.getElementById("time-bonus").innerHTML = currentTimer;
-    document.getElementById("elapsed-time").innerHTML = fmtMSS((timePerQuestion * questions.length) - currentTimer);
+    document.getElementById("elapsed-time").innerHTML = fmtMSS((timePerQuestion * questionList.length) - currentTimer);
 
     //CHECK CURRENT FINAL SCORE TO THE HIGH SCORES STORED IN LOCAL-STORAGE
     var isGreater = false;
@@ -278,6 +293,7 @@ $highScoreButton.addEventListener("click", setupHighScorePage);
 $mainPageButton.addEventListener("click", setupMainPage);
 $mainPageButton2.addEventListener("click", setupMainPage);
 $highScoreButton2.addEventListener("click", setupHighScorePage);
+$questionSelector.addEventListener("click", setupMainPage);
 $answerCol.addEventListener("click", function (evt) {
     if (evt.target.matches("button")) {
         checkAnswer(evt.target.value);
