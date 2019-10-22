@@ -4,6 +4,7 @@ var $quizHeaderCol = document.getElementById("quiz-header-col");
 var $highScoreHeaderCol = document.getElementById("high-score-header-col");
 var $endScoreHeaderCol = document.getElementById("end-score-header-col");
 var $timePerQuestion = document.querySelector(".time-per-q");
+var $timePerQuestion2 = document.querySelector(".time-per-q2");
 var $pointsPerQuestion = document.querySelector(".points-per-q");
 var $numOfQuestions = document.querySelector(".num-of-q");
 var $answerRow = document.getElementById("answer-row");
@@ -62,6 +63,7 @@ function setupMainPage() {
         questionList = questionsShort;
     }
     $timePerQuestion.innerHTML = timePerQuestion;
+    $timePerQuestion2.innerHTML = timePerQuestion;
     pointsPerQuestion = (100 / questionList.length);
     $pointsPerQuestion.innerHTML = Math.round(pointsPerQuestion);
     $numOfQuestions.innerHTML = questionList.length;
