@@ -33,7 +33,7 @@ h3 {
     max-width: 800px;
 }
 
-.header-row-main {
+.header-row-m {
     position: relative;
     text-align: center;
     color: #777777;
@@ -43,14 +43,14 @@ h3 {
     height: 80vh;
 }
 
-.header-row-questions {
+.header-row-q {
     position: relative;
     text-align: center;
     color: #777777;
     font-size: 16px;
     border: 3px dashed lightslategrey;
     border-radius: 25px;
-    height: 80vh;
+    height: 33vh;
 }
 
 .answer-row {
@@ -59,27 +59,6 @@ h3 {
     font-size: 16px;
     border: 3px dashed lightslategrey;
     border-radius: 25px;
-    height: 45vh;
-}
-
-.header-row-score {
-    position: relative;
-    text-align: center;
-    color: #777777;
-    font-size: 16px;
-    border: 3px dashed lightslategrey;
-    border-radius: 25px;
-    height: 80vh;
-}
-
-.header-row-high-score {
-    position: relative;
-    text-align: center;
-    color: #777777;
-    font-size: 16px;
-    border: 3px dashed lightslategrey;
-    border-radius: 25px;
-    height: 80vh;
 }
 
 .header-row-f {
