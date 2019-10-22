@@ -33,7 +33,7 @@ h3 {
     max-width: 800px;
 }
 
-.header-row-m {
+.header-row-main {
     position: relative;
     text-align: center;
     color: #777777;
@@ -43,14 +43,43 @@ h3 {
     height: 80vh;
 }
 
-.header-row-q {
+.header-row-questions {
     position: relative;
     text-align: center;
     color: #777777;
     font-size: 16px;
     border: 3px dashed lightslategrey;
     border-radius: 25px;
-    height: 33vh;
+    height: 80vh;
+}
+
+.answer-row {
+    text-align: center;
+    color: #777777;
+    font-size: 16px;
+    border: 3px dashed lightslategrey;
+    border-radius: 25px;
+    height: 45vh;
+}
+
+.header-row-score {
+    position: relative;
+    text-align: center;
+    color: #777777;
+    font-size: 16px;
+    border: 3px dashed lightslategrey;
+    border-radius: 25px;
+    height: 80vh;
+}
+
+.header-row-high-score {
+    position: relative;
+    text-align: center;
+    color: #777777;
+    font-size: 16px;
+    border: 3px dashed lightslategrey;
+    border-radius: 25px;
+    height: 80vh;
 }
 
 .header-row-f {
@@ -96,13 +125,6 @@ h3 {
     border-bottom: 1px dashed lightslategrey;
     border-radius: 0px 0px 15px 0px;
 }
-
-.answer-row {
-    text-align: center;
-    color: #777777;
-    font-size: 16px;
-    border: 3px dashed lightslategrey;
-    border-radius: 25px;
 }
 
 .small-text-leftside {
@@ -153,6 +175,7 @@ h3 {
 
 .disabled {
     filter: brightness(0.8) blur(3px);
+    opacity: .5;
 }
 
 .boarder {

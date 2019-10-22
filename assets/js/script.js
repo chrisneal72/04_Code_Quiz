@@ -1,120 +1,68 @@
-var $headerRow = document.getElementById("header-row");
-var $mainHeaderCol = document.getElementById("main-header-col");
-var $quizHeaderCol = document.getElementById("quiz-header-col");
-var $highScoreHeaderCol = document.getElementById("high-score-header-col");
-var $endScoreHeaderCol = document.getElementById("end-score-header-col");
-var $timePerQuestion = document.querySelector(".time-per-q");
-var $pointsPerQuestion = document.querySelector(".points-per-q");
-var $numOfQuestions = document.querySelector(".num-of-q");
-var $answerRow = document.getElementById("answer-row");
-var $answerCol = document.getElementById("answer-col");
-var $timerDiv = document.getElementById("timerDiv");
-var $qTrackerDiv = document.getElementById("qTrackerDiv");
-var $question = document.getElementById("question");
-var $startButton = document.getElementById("start-btn");
-var $highScoreButton = document.getElementById("high-score-btn");
-var $mainPageButton = document.getElementById("main-page-btn");
-var $mainPageButton2 = document.getElementById("main-page-btn2");
-var $highScoreButton2 = document.getElementById("high-score-btn2");
-var $clearScoresButton = document.getElementById("clear-scores-btn");
-var $submitHighScoreButton = document.getElementById("submit-high-score-btn");
-var $hrDivider = document.getElementById("hr-divider");
-var $currentScore = document.getElementById("current-score");
-var $highScoreAchived = document.getElementById("high-score-achived");
-var $highScoreForm = document.getElementById("high-score-form");
-var $highScoreInput = document.getElementById("enter-name");
-var $newHighScore = document.getElementById("new-high-score");
-var $newHighScorePos = document.getElementById("new-high-score-position");
-var $firstPlaceName = document.getElementById("first-place-name");
-var $firstPlaceScore = document.getElementById("first-place-score");
-var $secondPlaceName = document.getElementById("second-place-name");
-var $secondPlaceScore = document.getElementById("second-place-score");
-var $thirdPlaceName = document.getElementById("third-place-name");
-var $thirdPlaceScore = document.getElementById("third-place-score");
-var $answerImage = document.getElementById("answerImage");
-var questionCounter;
-var timerInterval;
-var currentTimer = 0;
-var randomQuestion = [];
-var correctAnswer;
-var numCorrect = 0;
-var currentScore = 0;
-var $questionSelector = document.getElementById("question-selector");
-var lHighScores = JSON.parse(localStorage.getItem("high-scores"));
+var $mainHeaderSection = $("#header-row-main");
+var $questionsSection = $("#header-row-questions");
+var $scoreSection = $("#header-row-score");
+var $highScoreSection = $("#header-row-high-score");
+var $timePerQuestion = $(".time-per-q");
 var timePerQuestion = 15;
-var pointsPerQuestion = (100 / questions.length);
+var $pointsPerQuestion = $(".points-per-q");
+var pointsPerQuestion = 0;
+var questionsList = [];
+var $numOfQuestions = $(".num-of-q");
+var randomQuestion = [];
+var currentTimer = 0;
+var currentScore = 0;
+var numCorrect = 0;
+var timerInterval = 0;
+var $questionText = $("#question");
+var $answerSection = $("#answer-col");
+var $timerText = $("#timer-text");
+var $currentQuestionNum = $("#current-q-num");
+var correctAnswer = "";
+var $totalNumOfQuestions = $("#total-q-num");
+var $answerImage = $("#answerImage");
 var modal = document.getElementById("myModal");
-var questionList;
-var whichQuiz; 
+var lHighScores = JSON.parse(localStorage.getItem("high-scores"));
+var $hrDivider = $("#hr-divider-score");
+var $highScoreAchived = $("#high-score-achived");
+var $highScoreInput = $("#enter-name");
+var $submitHighScoreButton = $("#submit-high-score-btn");
+var $firstPlaceName = $("#first-place-name");
+var $firstPlaceScore = $("#first-place-score");
+var $secondPlaceName = $("#second-place-name");
+var $secondPlaceScore = $("#second-place-score");
+var $thirdPlaceName = $("#third-place-name");
+var $thirdPlaceScore = $("#third-place-score");
+var newHighScore = 0;
+var newHighScorePos = 0;
 
 function setupMainPage() {
     //SHOWING MY MAIN PAGE DIVS
-    $headerRow.setAttribute("class", "row header-row-m align-items-center");
-    $mainHeaderCol.setAttribute("class", "col");
+    $mainHeaderSection.removeClass("d-none");
     //HIDING EVERYTHING ELSE
-    $quizHeaderCol.setAttribute("class", "col d-none");
-    $highScoreHeaderCol.setAttribute("class", "col d-none");
-    $endScoreHeaderCol.setAttribute("class", "col d-none");
-    $timerDiv.setAttribute("class", "timerDiv d-none");
-    $qTrackerDiv.setAttribute("class", "qTrackerDiv d-none");
-    $hrDivider.setAttribute("class", "d-none");
-    $answerRow.setAttribute("class", "d-none");
-    //IF I CHANGE THE QUESTIONS (ADD OR SUBTRACT THESE NUMBERS WILL UPDATE
-    whichQuiz = $questionSelector.checked;
-    if(whichQuiz){
+    $questionsSection.addClass("d-none");
+    $scoreSection.addClass("d-none");
+    $highScoreSection.addClass("d-none");
+    whichQuiz = $("#question-selector")[0].checked;
+    if (whichQuiz) {
         //LONG QUIZ
         questionList = questions;
-    }else{
+    } else {
         //Short Quiz
         questionList = questionsShort;
     }
-    $timePerQuestion.innerHTML = timePerQuestion;
+    $timePerQuestion.text(timePerQuestion);
     pointsPerQuestion = (100 / questionList.length);
-    $pointsPerQuestion.innerHTML = Math.round(pointsPerQuestion);
-    $numOfQuestions.innerHTML = questionList.length;
-}
-
-function setupHighScorePage() {
-    //SHOWING ALL OF THE HIGH SCORE DIVS
-    $headerRow.setAttribute("class", "row header-row-m align-items-center");
-    $highScoreHeaderCol.setAttribute("class", "col");
-    //HIDING EVERYTHING ELSE
-    $mainHeaderCol.setAttribute("class", "col d-none");
-    $quizHeaderCol.setAttribute("class", "col d-none");
-    $endScoreHeaderCol.setAttribute("class", "col d-none");
-    $timerDiv.setAttribute("class", "timerDiv d-none");
-    $qTrackerDiv.setAttribute("class", "qTrackerDiv d-none");
-    $hrDivider.setAttribute("class", "d-none");
-    $answerRow.setAttribute("class", "row d-none");
-    $currentScore.setAttribute("class", "row d-none");
-    $highScoreAchived.setAttribute("class", "row d-none");
-    if (lHighScores && lHighScores[0]) {
-        $firstPlaceName.innerHTML = lHighScores[0].name;
-        $firstPlaceScore.innerHTML = lHighScores[0].score;
-    }
-    if (lHighScores && lHighScores[1]) {
-        $secondPlaceName.innerHTML = lHighScores[1].name;
-        $secondPlaceScore.innerHTML = lHighScores[1].score;
-    }
-    if (lHighScores && lHighScores[2]) {
-        $thirdPlaceName.innerHTML = lHighScores[2].name;
-        $thirdPlaceScore.innerHTML = lHighScores[2].score;
-    }
+    $pointsPerQuestion.text(Math.round(pointsPerQuestion));
+    $numOfQuestions.text(questionList.length);
 }
 
 function setupQuestionsPage() {
-    //SHOWING THE REQUIRED QUESTION DIVS
-    $headerRow.setAttribute("class", "row header-row-q align-items-center");
-    $quizHeaderCol.setAttribute("class", "col");
-    $timerDiv.setAttribute("class", "timerDiv");
-    $qTrackerDiv.setAttribute("class", "qTrackerDiv");
-    $hrDivider.setAttribute("class", "row");
-    $answerRow.setAttribute("class", "row  answer-row");
-    //HIDING EVERTHING ELSE
-    $mainHeaderCol.setAttribute("class", "col d-none");
-    $highScoreHeaderCol.setAttribute("class", "col d-none");
-    $endScoreHeaderCol.setAttribute("class", "col d-none");
-    $highScoreAchived.setAttribute("class", "row d-none");
+    //SHOWING MY QUESTIONS DIVS
+    $questionsSection.removeClass("d-none");
+    //HIDING EVERYTHING ELSE
+    $mainHeaderSection.addClass("d-none");
+    $scoreSection.addClass("d-none");
+    $highScoreSection.addClass("d-none");
 
     //CREATING A NUMBER ARRAY TO KEEP KNOW WHAT QUESTIONS WERE USED
     //WHEN I USE A QUESTION NUMBER IT IS REMOVED FROM THIS ARRAY
@@ -125,10 +73,10 @@ function setupQuestionsPage() {
 
     //INITIALIZING MY INTERVAL AND MY COUNTDOWN TIMER
     currentTimer = timePerQuestion * questionList.length;
-    $timerDiv.children[0].innerHTML = fmtMSS(currentTimer);
+    $timerText.text(fmtMSS(currentTimer));
     timerInterval = setInterval(function () {
         currentTimer--;
-        $timerDiv.children[0].innerHTML = fmtMSS(currentTimer);
+        $timerText.text(fmtMSS(currentTimer));
         if (currentTimer < 1) {
             clearInterval(timerInterval);
             endQuiz();
@@ -147,44 +95,38 @@ function runQuestion() {
     //SO IF THE VALUE 3 IS MISSING, I CAN NOT GRAB THAT INDEX AGAIN
     var currentQuestion = randomQuestion.splice(Math.floor(Math.random() * randomQuestion.length), 1);
     //POPULATE THE QUESTION IN THE QUESTION DIV
-    $question.innerHTML = questionList[currentQuestion].title;
+    $questionText.text(questionList[currentQuestion].title);
     //CLEAR PREVIOUS BUTTONS START WITH A CLEAN SLATE
-    $answerCol.innerHTML = '';
+    $answerSection.text("");
     //LOOP OVER EACH ANSWER AND BUILD ITS BUTTON AND PUT IT ON THE PAGE
     for (i = 0; i < questionList[currentQuestion].choices.length; i++) {
-        var answerRow = document.createElement('div');
-        answerRow.setAttribute("class", "row");
-        var answerCol = document.createElement('div');
-        answerCol.setAttribute("class", "col");
-        var answerBtn = document.createElement('button');
         var thisChoice = questionList[currentQuestion].choices[i];
-        correctAnswer = questionList[currentQuestion].answer;
-        answerBtn.setAttribute("type", "button");
-        answerBtn.setAttribute("class", "btn");
-        answerBtn.setAttribute("id", "answer" + i);
-        answerBtn.setAttribute("value", thisChoice);
-        answerBtn.innerText = thisChoice;
-        $answerCol.appendChild(answerRow);
-        answerRow.appendChild(answerCol);
-        answerCol.appendChild(answerBtn);
+        $answerSection.append(
+            $("<div>").attr("class", "row").append(
+                $("<div>").attr("class", "col").append(
+                    $("<button>").attr("class", "btn").attr("id", "answer" + i).attr("value", thisChoice).text(thisChoice)
+                )
+            )
+        );
     }
 
-    $qTrackerDiv.children[0].innerHTML = questionList.length - randomQuestion.length;
-    $qTrackerDiv.children[1].innerHTML = questionList.length;
+    $currentQuestionNum.text(questionList.length - randomQuestion.length);
+    correctAnswer = questionList[currentQuestion].answer;
+    $totalNumOfQuestions.text(questionList.length);
 }
 
 function checkAnswer(selectedAnswer) {
     modal.style.display = "block";
     //CHECK THE ANSWER
     if (selectedAnswer === correctAnswer) {
-        $answerImage.src = "assets/images/checkmark.png";
+        $answerImage.attr("src", "assets/images/checkmark.png");
         currentScore = currentScore + pointsPerQuestion;
         numCorrect++;
     } else {
         //IF THEY GET IT WRONG APPLY 15 SEC PENALTY TO THE ACTIVE TIME
         currentTimer = currentTimer - timePerQuestion;
 
-        $answerImage.src = "assets/images/xmark.png";
+        $answerImage.attr("src", "assets/images/xmark.png");
     }
 
     //2 SECOND PAUSE TO SHOW THE CHECK OR X
@@ -205,30 +147,24 @@ function checkAnswer(selectedAnswer) {
 
 function endQuiz() {
     //SHOW MY ENDING SCORE SCREEN
-    $headerRow.setAttribute("class", "row header-row-m align-items-center");
-    $endScoreHeaderCol.setAttribute("class", "col");
-    $currentScore.setAttribute("class", "row");
-    var $quizScore = document.getElementById("quiz-score");
-    //HODE EVERTHING ELSE
-    $mainHeaderCol.setAttribute("class", "col d-none");
-    $quizHeaderCol.setAttribute("class", "col d-none");
-    $highScoreHeaderCol.setAttribute("class", "col d-none");
-    $timerDiv.setAttribute("class", "timerDiv d-none");
-    $qTrackerDiv.setAttribute("class", "qTrackerDiv d-none");
-    $hrDivider.setAttribute("class", "d-none");
-    $answerRow.setAttribute("class", "row d-none");
-    $highScoreAchived.setAttribute("class", "row d-none");
+    $scoreSection.removeClass("d-none");
+    //HIDING EVERYTHING ELSE
+    $questionsSection.addClass("d-none");
+    $mainHeaderSection.addClass("d-none");
+    $highScoreSection.addClass("d-none");
+    $hrDivider.addClass("d-none");
+    $highScoreAchived.addClass("d-none");
 
     //REFINE THE NUMBERS A BIT
     currentScore = Math.round(currentScore);
     var finalScore = currentScore + currentTimer;
     if (finalScore < 0) { finalScore = 0 }
     //SEND THE STATS TO THE MAIN PAGE
-    document.getElementById("quiz-score").innerHTML = finalScore;
-    document.getElementById("num-correct").innerHTML = numCorrect;
-    document.getElementById("points-earned").innerHTML = currentScore;
-    document.getElementById("time-bonus").innerHTML = currentTimer;
-    document.getElementById("elapsed-time").innerHTML = fmtMSS((timePerQuestion * questionList.length) - currentTimer);
+    $("#quiz-score").text(finalScore);
+    $("#num-correct").text(numCorrect);
+    $("#points-earned").text(currentScore);
+    $("#time-bonus").text(currentTimer);
+    $("#elapsed-time").text(fmtMSS((timePerQuestion * questionList.length) - currentTimer));
 
     //CHECK CURRENT FINAL SCORE TO THE HIGH SCORES STORED IN LOCAL-STORAGE
     var isGreater = false;
@@ -244,19 +180,18 @@ function endQuiz() {
     }
     //IF THIS QUALIFIES AS A NEW HIGH SCORE WE WILL PRESENT THAT ABILITY TO SAVE
     if ((finalScore > 5 && !lHighScores) || (finalScore > 5 && lHighScores.length < 3) || isGreater) {
-        //PRESENT HIGH SCORE DIVS   
-        $headerRow.setAttribute("class", "row header-row-f align-items-center");
-        $highScoreAchived.setAttribute("class", "row");
-        $hrDivider.setAttribute("class", "row");
-        $answerRow.setAttribute("class", "row  answer-row-f");
-        $answerCol.innerHTML = '';
-        $highScoreInput.disabled = false;
-        $submitHighScoreButton.disabled = false;
-        $highScoreInput.value = ''
+        //PRESENT HIGH SCORE DIVS
+        $hrDivider.removeClass("d-none");
+        $highScoreAchived.removeClass("d-none disabled");
+        $answerSection.text("");
+        $highScoreInput.prop("disabled", false);
+        $submitHighScoreButton.prop("disabled", false);
+        $highScoreInput.val("");
         //PASSING THE SCORE AND THE POSITION TO HIDDEN FIELDS SO WE DON'T HAVE TO GRAB AGAIN
         //I COULD HAVE USED GLOBAL VARS FOR THIS BUT I WANTED TO TRY HIDDEN FIELDS
-        $newHighScore.value = finalScore;
-        $newHighScorePos.value = i;
+        
+        newHighScore = finalScore;
+        newHighScorePos = i;
     }
 
     //RESET THE TRACKING VARS SO THEY DON'T KEEP BUILDING INTO THE NEXT QUIZ SESS
@@ -266,54 +201,76 @@ function endQuiz() {
 }
 
 function processHighScore() {
-    $highScoreInput.disabled = true;
-    $submitHighScoreButton.disabled = true;
-    $highScoreAchived.setAttribute("class", "row disabled");
+    $highScoreInput.prop("disabled", true);
+    $submitHighScoreButton.prop("disabled", true);
+    $highScoreAchived.addClass("disabled");
     //USE SPLICE TO INSERT THE SCORE WHERE IT GOES
     if (lHighScores) {
         //SPLICE OUR NEW SCORE IN
-        lHighScores.splice($newHighScorePos.value, 0, { name: $highScoreInput.value, score: $newHighScore.value });
+        lHighScores.splice(newHighScorePos, 0, { name: $highScoreInput.val(), score: newHighScore});
     } else {
         //IF THIS IS THE FIRST TIME THEN INITIALIZE THE ARRAY AND POPULATE
         lHighScores = [];
-        lHighScores[0] = { name: $highScoreInput.value, score: $newHighScore.value };
+        lHighScores[0] = { name: $highScoreInput.val(), score: newHighScore};
     }
     //I ONLY WANT TO KEEP 3 SCORES SO WE TRIM OFF THE LOWEST
     while (lHighScores.length > 3) { lHighScores.pop() }
     localStorage.setItem("high-scores", JSON.stringify(lHighScores));
 }
 
+function setupHighScorePage() {
+    //SHOWING ALL OF THE HIGH SCORE DIVS
+    $highScoreSection.removeClass("d-none");
+    //HIDING EVERYTHING ELSE
+    $scoreSection.addClass("d-none");
+    $questionsSection.addClass("d-none");
+    $mainHeaderSection.addClass("d-none");;
+    if (lHighScores && lHighScores[0]) {
+        $firstPlaceName.text(lHighScores[0].name);
+        $firstPlaceScore.text(lHighScores[0].score);
+    }
+    if (lHighScores && lHighScores[1]) {
+        $secondPlaceName.text(lHighScores[1].name);
+        $secondPlaceScore.text(lHighScores[1].score);
+    }
+    if (lHighScores && lHighScores[2]) {
+        $thirdPlaceName.text(lHighScores[2].name);
+        $thirdPlaceScore.text(lHighScores[2].score);
+    }
+}
+
 //Event Listeners
 window.addEventListener("DOMContentLoaded", setupMainPage);
-$startButton.addEventListener("click", setupQuestionsPage);
-$highScoreButton.addEventListener("click", setupHighScorePage);
-$mainPageButton.addEventListener("click", setupMainPage);
-$mainPageButton2.addEventListener("click", setupMainPage);
-$highScoreButton2.addEventListener("click", setupHighScorePage);
-$questionSelector.addEventListener("click", setupMainPage);
-$answerCol.addEventListener("click", function (evt) {
+$("#start-btn").on("click", setupQuestionsPage);
+$("#main-page-btn").on("click", setupMainPage);
+$("#main-page-btn2").on("click", setupMainPage);
+$("#high-score-btn").on("click", setupHighScorePage);
+$("#high-score-btn2").on("click", setupHighScorePage);
+$("#question-selector").on("click", setupMainPage);
+$answerSection.on("click", function (evt) {
     if (evt.target.matches("button")) {
         checkAnswer(evt.target.value);
     }
 });
-$highScoreForm.addEventListener("submit", function (event) {
+$("#high-score-form").submit(function (event) {
     event.preventDefault();
-    var highScoreFormText = $highScoreInput.value.trim();
+    var highScoreFormText = $highScoreInput.val().trim();
     // Return from function early if submitted todoText is blank
     if (highScoreFormText === "") {
         return;
     }
     processHighScore();
 });
-$clearScoresButton.addEventListener("click", function () {
-    lHighScores = '';
+
+$("#clear-scores-btn").on("click", function () {
+    lHighScores = [];
     localStorage.removeItem("high-scores");
-    $firstPlaceName.innerHTML = "Your name here?";
-    $firstPlaceScore.innerHTML = "Are you the best?";
-    $secondPlaceName.innerHTML = "Whats your name?";
-    $secondPlaceScore.innerHTML = "Points for this place?";
-    $thirdPlaceName.innerHTML = "New Game";
-    $thirdPlaceScore.innerHTML = "Who dis?";
+    $firstPlaceName.text("Your name here?");
+    $firstPlaceScore.text("Are you the best?");
+    $secondPlaceName.text("Whats your name?");
+    $secondPlaceScore.text("Points for this place?");
+    $thirdPlaceName.text("New Game");
+    $thirdPlaceScore.text("Who dis?");
     setupHighScorePage();
 });
 
@@ -321,4 +278,4 @@ $clearScoresButton.addEventListener("click", function () {
 //Divide those seconds by 60 and subtract from the original seconds passed in
 //divide all of that by 60 to get the minutes. The remainins seconds are then added to the end
 //It adds : unless the seconds are less that 9, the it adds :0
-function fmtMSS(s){return(s-(s%=60))/60+(9<s?':':':0')+s}
+function fmtMSS(s) { return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s }
